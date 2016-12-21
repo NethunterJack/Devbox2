@@ -16,7 +16,11 @@
 
 package com.xxxifan.devbox.components;
 
+import android.os.Bundle;
+import android.support.v4.util.ArrayMap;
 import android.view.View;
+
+import com.xxxifan.devbox.core.base.UIComponent;
 
 /**
  * Translucent Activity for Image background. Note the layout will start from status bar,
@@ -30,9 +34,8 @@ public abstract class ImageTranslucentActivity extends TranslucentActivity {
     }
 
     @Override
-    protected void setupToolbar(View toolbarView) {
-        super.setupToolbar(toolbarView);
+    protected void inflateComponents(View containerView, ArrayMap<String, UIComponent> uiComponents) {
+        super.inflateComponents(containerView, uiComponents);
         transparentToolbar();
     }
-
 }

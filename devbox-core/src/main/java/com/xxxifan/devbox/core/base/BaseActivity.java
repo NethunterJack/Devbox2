@@ -28,8 +28,10 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle.LifecycleTransformer;
@@ -40,6 +42,7 @@ import com.xxxifan.devbox.core.R;
 import com.xxxifan.devbox.core.event.BaseEvent;
 import com.xxxifan.devbox.core.util.IOUtils;
 import com.xxxifan.devbox.core.util.StatisticalUtil;
+import com.xxxifan.devbox.core.util.Strings;
 import com.xxxifan.devbox.core.util.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +50,10 @@ import org.greenrobot.eventbus.EventBus;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -70,6 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private BackKeyListener mBackKeyListener;
     private DataLoader mDataLoader;
+    private ArrayMap<String, UIComponent> mUIComponents;
 
     private boolean mConfigured;
     private int mRootLayoutId;
@@ -84,6 +92,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setActivityView(getLayoutId());
         onSetupActivity(savedInstanceState);
+        if (mRootLayoutId > 0) {
+            inflateComponents($(BASE_CONTAINER_ID), getUIComponents());
+        }
 
         if (getDataLoader() != null && savedInstanceState != null) {
             getDataLoader().onRestoreState(savedInstanceState);
@@ -159,27 +170,44 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    //##########  Protected construct methods  ##########
+    //##########  construct methods  ##########
     protected void onConfigureActivity() {
         //Stub
-    }
-
-    protected void setActivityView(@LayoutRes int layoutResID) {
-        setContentView(layoutResID);
-    }
-
-    @Override public void setContentView(@LayoutRes int layoutResID) {
-        // if root layout has been set, then it's a container, so let subclass
-        // to handle content view.
-        if (mRootLayoutId == 0) {
-            mRootLayoutId = layoutResID;
-        }
-        super.setContentView(mRootLayoutId);
     }
 
     @BeforeConfigActivity protected void setRootLayoutId(@LayoutRes int rootLayoutId) {
         checkConfigured();
         mRootLayoutId = rootLayoutId;
+    }
+
+    protected void setActivityView(@LayoutRes int layoutResID) {
+        // if root layout has been set, then it's a container, so let subclass
+        // to handle content view.
+        boolean hasNewRoot = mRootLayoutId > 0;
+        setContentView(hasNewRoot ? mRootLayoutId : layoutResID);
+        if (hasNewRoot) {
+            attachContentView($(BASE_CONTAINER_ID), layoutResID);
+        }
+    }
+
+    @CallSuper protected void attachContentView(View containerView, @LayoutRes int layoutResID) {
+        if (containerView == null) {
+            throw new IllegalStateException("Cannot find container view");
+        }
+        if (layoutResID == 0) {
+            throw new IllegalStateException("Invalid layout id");
+        }
+        View contentView = getLayoutInflater().inflate(layoutResID, null, false);
+        ((ViewGroup) containerView).addView(contentView, 0);
+    }
+
+    protected void inflateComponents(View containerView, ArrayMap<String, UIComponent> uiComponents) {
+        if (uiComponents == null) {
+            return;
+        }
+        for (int i = 0; i < uiComponents.size(); i++) {
+            uiComponents.get(uiComponents.keyAt(i)).inflate(containerView);
+        }
     }
 
     //##########  Protected helper methods ##########
@@ -230,6 +258,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected DataLoader registerDataLoader(boolean useNetwork, DataLoader.LoadCallback callback) {
         mDataLoader = DataLoader.init(useNetwork, callback);
         return mDataLoader;
+    }
+
+    protected ArrayMap<String, UIComponent> getUIComponents() {
+        return null;
     }
 
     protected DataLoader getDataLoader() {

@@ -22,6 +22,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
+import android.support.v4.util.ArrayMap;
+import android.support.v4.view.OnApplyWindowInsetsListener;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.WindowInsetsCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -29,7 +33,9 @@ import android.view.WindowInsets;
 import android.view.WindowManager;
 
 import com.xxxifan.devbox.core.base.SystemBarTintManager;
-import com.xxxifan.devbox.core.base.extended.ToolbarActivity;
+import com.xxxifan.devbox.core.base.UIComponent;
+import com.xxxifan.devbox.core.base.component.ToolbarActivity;
+import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
 import com.xxxifan.devbox.core.util.ViewUtils;
 
 import java.lang.annotation.ElementType;
@@ -99,14 +105,22 @@ public abstract class TranslucentActivity extends ToolbarActivity {
         }
     }
 
-    @Override protected void setupToolbar(View toolbarView) {
-        super.setupToolbar(toolbarView);
-        if (getFitWindowMode() != FIT_WINDOW_BOTH) {
-            if (getFitWindowMode() == FIT_TOOLBAR) {
-                ((ViewGroup.MarginLayoutParams) getContentView().getLayoutParams()).topMargin = 0;
+    @Override protected ArrayMap<String, UIComponent> getUIComponents() {
+        ToolbarComponent toolbarComponent = new ToolbarComponent() {
+            @Override protected void setupToolbar(View containerView, View toolbarView) {
+                super.setupToolbar(containerView, toolbarView);
+                if (getFitWindowMode() != FIT_WINDOW_BOTH) {
+                    if (getFitWindowMode() == FIT_TOOLBAR) {
+                        View contentView = ((ViewGroup) containerView).getChildAt(0);
+                        ((ViewGroup.MarginLayoutParams) contentView.getLayoutParams()).topMargin = 0;
+                    }
+                    ((ViewGroup.MarginLayoutParams) toolbarView.getLayoutParams()).topMargin = mToolbarOffset;
+                }
             }
-            ((ViewGroup.MarginLayoutParams) toolbarView.getLayoutParams()).topMargin = mToolbarOffset;
-        }
+        };
+        ArrayMap<String, UIComponent> arrayMap = new ArrayMap<>();
+        arrayMap.put(toolbarComponent.getTag(), toolbarComponent);
+        return arrayMap;
     }
 
     /**
