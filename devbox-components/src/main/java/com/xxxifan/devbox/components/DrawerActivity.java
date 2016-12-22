@@ -24,6 +24,7 @@ import android.view.View;
 
 import com.xxxifan.devbox.core.base.UIComponent;
 import com.xxxifan.devbox.core.base.component.ToolbarActivity;
+import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
 
 /**
  * Created by xifan on 4/6/16.
@@ -39,15 +40,11 @@ public abstract class DrawerActivity extends ToolbarActivity {
         setRootLayoutId(R.layout._internal_activity_drawer_base);
     }
 
-    @Override
-    protected void setActivityView(int layoutResID) {
-        super.setContentView(layoutResID);
-        attachContentView($(BASE_DRAWER_ID), layoutResID);
-    }
-
     @Override protected ArrayMap<String, UIComponent> getUIComponents() {
         mDrawerComponent = new DrawerComponent(getDrawerView());
+        ToolbarComponent toolbarComponent = new ToolbarComponent();
         ArrayMap<String, UIComponent> arrayMap = new ArrayMap<>();
+        arrayMap.put(toolbarComponent.getTag(), toolbarComponent);
         arrayMap.put(mDrawerComponent.getTag(), mDrawerComponent);
         return arrayMap;
     }

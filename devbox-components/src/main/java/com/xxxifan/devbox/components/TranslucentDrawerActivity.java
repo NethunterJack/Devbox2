@@ -16,26 +16,21 @@
 
 package com.xxxifan.devbox.components;
 
+import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.xxxifan.devbox.core.base.UIComponent;
-
-import java.util.List;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
 
 /**
  * Created by xifan on 5/16/16.
  */
 public abstract class TranslucentDrawerActivity extends TranslucentActivity {
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private DrawerComponent mDrawerComponent;
 
     @Override
     protected void onConfigureActivity() {
@@ -43,51 +38,26 @@ public abstract class TranslucentDrawerActivity extends TranslucentActivity {
         setRootLayoutId(R.layout._internal_activity_drawer_base);
     }
 
-    @Override
-    protected void setComponents(View containerView, List<UIComponent> UIComponents) {
-        View drawerLayout = $(DrawerActivity.BASE_DRAWER_ID);
-        if (drawerLayout == null) {
-            throw new IllegalStateException("Cannot find drawer_layout");
-        }
-        // setup drawer view
-        View drawerView = getDrawerView();
-        if (drawerView != null) {
-            drawerView.setFitsSystemWindows(true);
-            DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT);
-            params.gravity = Gravity.LEFT;
-            ((DrawerLayout) drawerLayout).addView(drawerView, params);
-        }
-        super.setComponents(containerView, UIComponents);
-    }
-
-    @Override
-    protected void setupToolbar(View toolbarView) {
-        super.setupToolbar(toolbarView);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            mDrawerLayout = $(DrawerActivity.BASE_DRAWER_ID);
-            mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, ((Toolbar) toolbarView), 0, 0);
-            mDrawerLayout.addDrawerListener(mDrawerToggle);
-            mDrawerLayout.post(new Runnable() {
-                public void run() {
-                    mDrawerToggle.syncState();
-                }
-            });
-        }
+    @Override protected ArrayMap<String, UIComponent> getUIComponents() {
+        mDrawerComponent = new DrawerComponent(getDrawerView());
+        ToolbarComponent toolbarComponent = new ToolbarComponent();
+        ArrayMap<String, UIComponent> arrayMap = new ArrayMap<>();
+        arrayMap.put(toolbarComponent.getTag(), toolbarComponent);
+        arrayMap.put(mDrawerComponent.getTag(), mDrawerComponent);
+        return arrayMap;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home && mDrawerLayout != null) {
-            mDrawerLayout.openDrawer(Gravity.LEFT);
+        if (item.getItemId() == android.R.id.home && getDrawerLayout() != null) {
+            getDrawerLayout().openDrawer(Gravity.LEFT);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     public DrawerLayout getDrawerLayout() {
-        return mDrawerLayout;
+        return mDrawerComponent.getDrawerLayout();
     }
 
     protected abstract View getDrawerView();

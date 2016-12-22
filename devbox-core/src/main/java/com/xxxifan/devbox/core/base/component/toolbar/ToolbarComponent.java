@@ -59,7 +59,7 @@ public class ToolbarComponent implements UIComponent {
     }
 
     protected void setupToolbar(View containerView, View toolbarView) {
-        BaseActivity activity = ((BaseActivity) toolbarView.getContext());
+        BaseActivity activity = ((BaseActivity) containerView.getContext());
         View contentView = ((ViewGroup) containerView).getChildAt(0);
         // fix content position if toolbar exists.
         ((ViewGroup.MarginLayoutParams) contentView.getLayoutParams()).topMargin = toolbarView

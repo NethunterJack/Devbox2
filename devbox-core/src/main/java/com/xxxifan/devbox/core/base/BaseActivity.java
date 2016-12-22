@@ -42,7 +42,6 @@ import com.xxxifan.devbox.core.R;
 import com.xxxifan.devbox.core.event.BaseEvent;
 import com.xxxifan.devbox.core.util.IOUtils;
 import com.xxxifan.devbox.core.util.StatisticalUtil;
-import com.xxxifan.devbox.core.util.Strings;
 import com.xxxifan.devbox.core.util.ViewUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,10 +49,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -93,7 +88,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setActivityView(getLayoutId());
         onSetupActivity(savedInstanceState);
         if (mRootLayoutId > 0) {
-            inflateComponents($(BASE_CONTAINER_ID), getUIComponents());
+            inflateComponents(getContainerView(), getUIComponents());
         }
 
         if (getDataLoader() != null && savedInstanceState != null) {
@@ -186,7 +181,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         boolean hasNewRoot = mRootLayoutId > 0;
         setContentView(hasNewRoot ? mRootLayoutId : layoutResID);
         if (hasNewRoot) {
-            attachContentView($(BASE_CONTAINER_ID), layoutResID);
+            attachContentView(getContainerView(), layoutResID);
         }
     }
 
@@ -231,6 +226,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public Drawable getCompatDrawable(@DrawableRes int resId) {
         return ContextCompat.getDrawable(this, resId);
+    }
+
+    public View getContainerView() {
+        return ((ViewGroup) $(android.R.id.content)).getChildAt(0);
     }
 
     protected boolean isConfigured() {
