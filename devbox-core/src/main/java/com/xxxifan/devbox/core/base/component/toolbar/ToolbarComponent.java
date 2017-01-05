@@ -63,8 +63,7 @@ public class ToolbarComponent implements UIComponent {
         View contentView = ((ViewGroup) containerView).getChildAt(0);
         // fix content position if toolbar exists.
         ((ViewGroup.MarginLayoutParams) contentView.getLayoutParams()).topMargin = toolbarView
-                .getResources()
-                .getDimensionPixelSize(R.dimen.toolbar_height);
+                .getResources().getDimensionPixelSize(R.dimen.toolbar_height);
         // set support actionbar
         Toolbar toolbar = (Toolbar) toolbarView;
         toolbar.setBackgroundColor(ViewUtils.getCompatColor(R.color.colorPrimary));

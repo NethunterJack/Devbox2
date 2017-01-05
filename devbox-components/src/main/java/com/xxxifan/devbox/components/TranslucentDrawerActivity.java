@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.xxxifan.devbox.core.base.UIComponent;
-import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
 
 /**
  * Created by xifan on 5/16/16.
@@ -36,13 +35,12 @@ public abstract class TranslucentDrawerActivity extends TranslucentActivity {
     protected void onConfigureActivity() {
         super.onConfigureActivity();
         setRootLayoutId(R.layout._internal_activity_drawer_base);
+        setFitSystemWindowMode(FIT_TOOLBAR);
     }
 
     @Override protected ArrayMap<String, UIComponent> getUIComponents() {
+        ArrayMap<String, UIComponent> arrayMap = super.getUIComponents();
         mDrawerComponent = new DrawerComponent(getDrawerView());
-        ToolbarComponent toolbarComponent = new ToolbarComponent();
-        ArrayMap<String, UIComponent> arrayMap = new ArrayMap<>();
-        arrayMap.put(toolbarComponent.getTag(), toolbarComponent);
         arrayMap.put(mDrawerComponent.getTag(), mDrawerComponent);
         return arrayMap;
     }
