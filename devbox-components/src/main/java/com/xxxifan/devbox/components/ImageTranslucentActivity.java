@@ -16,9 +16,7 @@
 
 package com.xxxifan.devbox.components;
 
-import android.os.Bundle;
 import android.support.v4.util.ArrayMap;
-import android.view.View;
 
 import com.xxxifan.devbox.core.base.UIComponent;
 
@@ -29,13 +27,13 @@ import com.xxxifan.devbox.core.base.UIComponent;
 public abstract class ImageTranslucentActivity extends TranslucentActivity {
     @Override protected void onConfigureActivity() {
         super.onConfigureActivity();
-        setFitSystemWindowMode(FIT_TOOLBAR);
+        setFitSystemWindowMode(FIT_WINDOW_TOP);
         translucentNavBar();
     }
 
-    @Override
-    protected void inflateComponents(View containerView, ArrayMap<String, UIComponent> uiComponents) {
-        super.inflateComponents(containerView, uiComponents);
+    @Override protected ArrayMap<String, UIComponent> getUIComponents() {
         transparentToolbar();
+        getSystemBarManager().setStatusBarTintEnabled(false);
+        return super.getUIComponents();
     }
 }
