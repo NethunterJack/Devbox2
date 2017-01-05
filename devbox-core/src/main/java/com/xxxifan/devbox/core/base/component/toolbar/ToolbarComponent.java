@@ -60,17 +60,20 @@ public class ToolbarComponent implements UIComponent {
 
     protected void setupToolbar(View containerView, View toolbarView) {
         BaseActivity activity = ((BaseActivity) containerView.getContext());
-        View contentView = ((ViewGroup) containerView).getChildAt(0);
-        // fix content position if toolbar exists.
-        ((ViewGroup.MarginLayoutParams) contentView.getLayoutParams()).topMargin = toolbarView
-                .getResources().getDimensionPixelSize(R.dimen.toolbar_height);
-        // set support actionbar
-        Toolbar toolbar = (Toolbar) toolbarView;
-        toolbar.setBackgroundColor(ViewUtils.getCompatColor(R.color.colorPrimary));
         if (activity.getSupportActionBar() instanceof WindowDecorActionBar) {
             throw new IllegalStateException("You must make your app theme extends from Devbox.AppTheme or manually set windowActionBar to false.");
         }
+
+        // fix content position if toolbar exists.
+        View contentView = ((ViewGroup) containerView).getChildAt(0);
+        ((ViewGroup.MarginLayoutParams) contentView.getLayoutParams()).topMargin = toolbarView
+                .getResources().getDimensionPixelSize(R.dimen.toolbar_height);
+
+        // set support actionbar
+        Toolbar toolbar = (Toolbar) toolbarView;
+        toolbar.setBackgroundColor(ViewUtils.getCompatColor(R.color.colorPrimary));
         activity.setSupportActionBar(toolbar);
+
         // set home as up key
         if (!activity.isTaskRoot() && activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);

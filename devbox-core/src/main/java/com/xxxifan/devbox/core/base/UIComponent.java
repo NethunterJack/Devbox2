@@ -16,7 +16,6 @@
 
 package com.xxxifan.devbox.core.base;
 
-import android.content.Context;
 import android.view.View;
 
 /**
@@ -24,6 +23,10 @@ import android.view.View;
  */
 
 public interface UIComponent {
+    /**
+     * @param containerView base container of user layout, usually use $(BASE_CONTAINER_ID)
+     */
     void inflate(View containerView);
+
     String getTag();
 }

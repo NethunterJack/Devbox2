@@ -67,7 +67,7 @@ public abstract class TranslucentActivity extends ToolbarActivity {
     protected void attachContentView(View containerView, @LayoutRes int layoutResID) {
         super.attachContentView(containerView, layoutResID);
         if (isKitkat()) {
-            setWindowOffset(containerView, ViewUtils.getSystemBarHeight());
+            mToolbarOffset = ViewUtils.getSystemBarHeight();
         }
 
         if (isLollipop() && getFitWindowMode() != FIT_WINDOW_BOTH) {
@@ -95,7 +95,6 @@ public abstract class TranslucentActivity extends ToolbarActivity {
         if (getFitWindowMode() == FIT_WINDOW_TOP) {
             ((MarginLayoutParams) containerView.getLayoutParams()).topMargin = offset;
         } else if (getFitWindowMode() == FIT_TOOLBAR) {
-            mToolbarOffset = offset;
             if ($(BASE_TOOLBAR_ID) != null) {
                 ((MarginLayoutParams) $(BASE_TOOLBAR_ID).getLayoutParams()).topMargin = offset;
             }
@@ -111,9 +110,12 @@ public abstract class TranslucentActivity extends ToolbarActivity {
                 if (getFitWindowMode() != FIT_WINDOW_BOTH) {
                     if (getFitWindowMode() == FIT_TOOLBAR) {
                         View contentView = ((ViewGroup) containerView).getChildAt(0);
-                        ((MarginLayoutParams) contentView.getLayoutParams()).topMargin = mToolbarOffset;
+                        int toolbarHeight = toolbarView.getResources()
+                                .getDimensionPixelSize(R.dimen.toolbar_height);
+                        int topMargin = ((MarginLayoutParams) contentView.getLayoutParams()).topMargin;
+                        ((MarginLayoutParams) contentView.getLayoutParams()).topMargin =
+                                Math.max(topMargin, toolbarHeight + mToolbarOffset);
                     }
-                    ((MarginLayoutParams) toolbarView.getLayoutParams()).topMargin = mToolbarOffset;
                 }
             }
         };

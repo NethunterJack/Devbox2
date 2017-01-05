@@ -61,13 +61,15 @@ public class DrawerComponent implements UIComponent {
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             activity.getSupportActionBar().setHomeButtonEnabled(true);
             Toolbar toolbar = (Toolbar) containerView.findViewById(ToolbarActivity.BASE_TOOLBAR_ID);
-            mDrawerToggle = new ActionBarDrawerToggle(activity, mDrawerLayout, toolbar, 0, 0);
-            mDrawerLayout.addDrawerListener(mDrawerToggle);
-            mDrawerLayout.post(new Runnable() {
-                public void run() {
-                    mDrawerToggle.syncState();
-                }
-            });
+            if (toolbar != null) {
+                mDrawerToggle = new ActionBarDrawerToggle(activity, mDrawerLayout, toolbar, 0, 0);
+                mDrawerLayout.addDrawerListener(mDrawerToggle);
+                mDrawerLayout.post(new Runnable() {
+                    public void run() {
+                        mDrawerToggle.syncState();
+                    }
+                });
+            }
         }
     }
 
