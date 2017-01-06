@@ -16,13 +16,9 @@
 
 package com.xxxifan.devbox.demo.ui.view.main;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.ArrayMap;
 
-import com.xxxifan.devbox.core.base.BaseActivity;
-import com.xxxifan.devbox.core.base.component.ToolbarActivity;
-import com.xxxifan.devbox.demo.R;
+import com.xxxifan.devbox.core.base.ToolbarActivity;
 
 /**
  * Created by xifan on 12/20/16.

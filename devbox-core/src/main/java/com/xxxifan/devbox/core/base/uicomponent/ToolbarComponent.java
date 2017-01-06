@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.xxxifan.devbox.core.base.component.toolbar;
+package com.xxxifan.devbox.core.base.uicomponent;
 
 import android.support.v7.app.WindowDecorActionBar;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +24,6 @@ import android.view.ViewStub;
 
 import com.xxxifan.devbox.core.R;
 import com.xxxifan.devbox.core.base.BaseActivity;
-import com.xxxifan.devbox.core.base.UIComponent;
 import com.xxxifan.devbox.core.util.ViewUtils;
 
 

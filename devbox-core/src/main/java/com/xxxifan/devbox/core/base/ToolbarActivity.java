@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.xxxifan.devbox.core.base.component;
+package com.xxxifan.devbox.core.base;
 
 import android.support.annotation.LayoutRes;
 import android.view.MenuItem;
@@ -22,8 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xxxifan.devbox.core.R;
-import com.xxxifan.devbox.core.base.BaseActivity;
-import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
+import com.xxxifan.devbox.core.base.uicomponent.ToolbarComponent;
 
 /**
  * Created by xifan on 4/5/16.

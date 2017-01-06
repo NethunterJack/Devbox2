@@ -22,6 +22,10 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.xxxifan.devbox.components.uicomponent.DrawerComponent;
+
+import static com.xxxifan.devbox.components.uicomponent.TranslucentBarComponent.FIT_TOOLBAR;
+
 /**
  * Created by xifan on 5/16/16.
  */

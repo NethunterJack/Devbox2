@@ -39,6 +39,7 @@ import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.android.RxLifecycleAndroid;
 import com.xxxifan.devbox.core.R;
+import com.xxxifan.devbox.core.base.uicomponent.UIComponent;
 import com.xxxifan.devbox.core.event.BaseEvent;
 import com.xxxifan.devbox.core.util.IOUtils;
 import com.xxxifan.devbox.core.util.StatisticalUtil;

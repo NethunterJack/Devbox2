@@ -22,8 +22,9 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.xxxifan.devbox.core.base.component.ToolbarActivity;
-import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
+import com.xxxifan.devbox.components.uicomponent.DrawerComponent;
+import com.xxxifan.devbox.core.base.ToolbarActivity;
+import com.xxxifan.devbox.core.base.uicomponent.ToolbarComponent;
 
 /**
  * Created by xifan on 4/6/16.

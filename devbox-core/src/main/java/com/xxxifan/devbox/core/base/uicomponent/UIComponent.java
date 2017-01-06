@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.xxxifan.devbox.core.base;
+package com.xxxifan.devbox.core.base.uicomponent;
 
 import android.view.View;
 
