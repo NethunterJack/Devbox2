@@ -16,14 +16,13 @@
 
 package com.xxxifan.devbox.core.base.component;
 
-import android.support.v4.util.ArrayMap;
+import android.support.annotation.LayoutRes;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.xxxifan.devbox.core.R;
 import com.xxxifan.devbox.core.base.BaseActivity;
-import com.xxxifan.devbox.core.base.UIComponent;
 import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
 
 /**
@@ -36,11 +35,9 @@ public abstract class ToolbarActivity extends BaseActivity {
         setRootLayoutId(R.layout._internal_activity_base);
     }
 
-    @Override protected ArrayMap<String, UIComponent> getUIComponents() {
-        UIComponent uiComponent = new ToolbarComponent();
-        ArrayMap<String, UIComponent> arrayMap = new ArrayMap<>();
-        arrayMap.put(uiComponent.getTag(), uiComponent);
-        return arrayMap;
+    @Override protected void attachContentView(View containerView, @LayoutRes int layoutResID) {
+        super.attachContentView(containerView, layoutResID);
+        addUIComponents(new ToolbarComponent());
     }
 
     /**

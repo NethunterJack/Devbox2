@@ -16,13 +16,11 @@
 
 package com.xxxifan.devbox.components;
 
-import android.support.v4.util.ArrayMap;
+import android.support.annotation.LayoutRes;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.xxxifan.devbox.core.base.UIComponent;
 
 /**
  * Created by xifan on 5/16/16.
@@ -38,11 +36,10 @@ public abstract class TranslucentDrawerActivity extends TranslucentActivity {
         setFitSystemWindowMode(FIT_TOOLBAR);
     }
 
-    @Override protected ArrayMap<String, UIComponent> getUIComponents() {
-        ArrayMap<String, UIComponent> arrayMap = super.getUIComponents();
+    @Override protected void attachContentView(View containerView, @LayoutRes int layoutResID) {
+        super.attachContentView(containerView, layoutResID);
         mDrawerComponent = new DrawerComponent(getDrawerView());
-        arrayMap.put(mDrawerComponent.getTag(), mDrawerComponent);
-        return arrayMap;
+        addUIComponents(mDrawerComponent);
     }
 
     @Override

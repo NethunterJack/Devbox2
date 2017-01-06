@@ -185,6 +185,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Attach views to layout. It's good time to add UIComponent here.
+     * @param containerView
+     * @param layoutResID
+     */
     @CallSuper protected void attachContentView(View containerView, @LayoutRes int layoutResID) {
         if (containerView == null) {
             throw new IllegalStateException("Cannot find container view");
@@ -196,7 +201,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ((ViewGroup) containerView).addView(contentView, 0);
     }
 
-    protected void inflateComponents(View containerView, ArrayMap<String, UIComponent> uiComponents) {
+    private void inflateComponents(View containerView, ArrayMap<String, UIComponent> uiComponents) {
         if (uiComponents == null) {
             return;
         }
@@ -205,38 +210,45 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Override {@link BaseView#showMessage(String)}
+     */
+    public void showMessage(String msg) {
+        ViewUtils.showToast(msg);
+    }
+
     //##########  Protected helper methods ##########
     @SuppressWarnings("unchecked")
-    protected <T extends View> T $(int viewId) {
+    protected final <T extends View> T $(int viewId) {
         return (T) findViewById(viewId);
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends View> T $(View view, int viewId) {
+    protected final <T extends View> T $(View view, int viewId) {
         return (T) view.findViewById(viewId);
     }
 
-    public Context getContext() {
+    public final Context getContext() {
         return this;
     }
 
-    @ColorInt public int getCompatColor(@ColorRes int resId) {
+    @ColorInt public final int getCompatColor(@ColorRes int resId) {
         return ContextCompat.getColor(this, resId);
     }
 
-    public Drawable getCompatDrawable(@DrawableRes int resId) {
+    public final Drawable getCompatDrawable(@DrawableRes int resId) {
         return ContextCompat.getDrawable(this, resId);
     }
 
-    public View getContainerView() {
+    public final View getContainerView() {
         return ((ViewGroup) $(android.R.id.content)).getChildAt(0);
     }
 
-    protected boolean isConfigured() {
+    protected final boolean isConfigured() {
         return mConfigured;
     }
 
-    protected void checkConfigured() {
+    protected final void checkConfigured() {
         if (mConfigured) {
             throw new IllegalStateException("You must call this method in onConfigureActivity");
         }
@@ -245,7 +257,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * register EventBus on resume/pause by default
      */
-    protected void registerEventBus() {
+    protected final void registerEventBus() {
         mRegisterEventBus = true;
     }
 
@@ -254,56 +266,72 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param useNetwork if is network data loader, it will not request if no network there.
      */
-    protected DataLoader registerDataLoader(boolean useNetwork, DataLoader.LoadCallback callback) {
+    protected final DataLoader registerDataLoader(boolean useNetwork, DataLoader.LoadCallback callback) {
         mDataLoader = DataLoader.init(useNetwork, callback);
         return mDataLoader;
     }
 
-    protected ArrayMap<String, UIComponent> getUIComponents() {
+    /**
+     * add UIComponents, it will use {@link UIComponent#getTag()} as name, same component will be replaced
+     *
+     * @return current uiComponents
+     */
+    protected final ArrayMap<String, UIComponent> addUIComponents(UIComponent... uiComponents) {
+        if (mUIComponents == null) {
+            mUIComponents = new ArrayMap<>();
+        }
+        for (int i = 0, s = uiComponents.length; i < s; i++) {
+            mUIComponents.put(uiComponents[i].getTag(), uiComponents[i]);
+        }
+        return mUIComponents;
+    }
+
+    protected final ArrayMap<String, UIComponent> getUIComponents() {
+        return mUIComponents;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected final <T> T getUIComponent(String tag, Class<T> clazz) {
+        if (mUIComponents != null) {
+            return clazz.cast(mUIComponents.get(tag)) ;
+        }
         return null;
     }
 
-    protected DataLoader getDataLoader() {
+    protected final DataLoader getDataLoader() {
         return mDataLoader;
     }
 
-    protected void postEvent(@NonNull BaseEvent event, Class target) {
+    protected final void postEvent(@NonNull BaseEvent event, Class target) {
         EventBus.getDefault().post(event);
     }
 
-    protected void postStickyEvent(@NonNull BaseEvent event, Class target) {
+    protected final void postStickyEvent(@NonNull BaseEvent event, Class target) {
         EventBus.getDefault().postSticky(event);
     }
 
-    public Observable<ActivityEvent> lifecycle() {
+    public final Observable<ActivityEvent> lifecycle() {
         return lifecycleSubject.asObservable();
     }
 
-    public <T> LifecycleTransformer<T> bindUntilEvent(ActivityEvent event) {
+    public final <T> LifecycleTransformer<T> bindUntilEvent(ActivityEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
-    public <T> LifecycleTransformer<T> bindToLifecycle() {
+    public final <T> LifecycleTransformer<T> bindToLifecycle() {
         return RxLifecycleAndroid.bindActivity(lifecycleSubject);
     }
 
-    protected <T> Observable.Transformer<T, T> io() {
+    protected final <T> Observable.Transformer<T, T> io() {
         return IOUtils.io();
     }
 
-    protected <T> Observable.Transformer<T, T> computation() {
+    protected final <T> Observable.Transformer<T, T> computation() {
         return IOUtils.computation();
     }
 
-    public void setBackKeyListener(BackKeyListener listener) {
+    public final void setBackKeyListener(BackKeyListener listener) {
         mBackKeyListener = listener;
-    }
-
-    /**
-     * Override {@link BaseView#showMessage(String)}
-     */
-    public void showMessage(String msg) {
-        ViewUtils.showToast(msg);
     }
 
     //##########  Abstract methods  ###########

@@ -16,13 +16,12 @@
 
 package com.xxxifan.devbox.components;
 
-import android.support.v4.util.ArrayMap;
+import android.support.annotation.LayoutRes;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.xxxifan.devbox.core.base.UIComponent;
 import com.xxxifan.devbox.core.base.component.ToolbarActivity;
 import com.xxxifan.devbox.core.base.component.toolbar.ToolbarComponent;
 
@@ -40,13 +39,10 @@ public abstract class DrawerActivity extends ToolbarActivity {
         setRootLayoutId(R.layout._internal_activity_drawer_base);
     }
 
-    @Override protected ArrayMap<String, UIComponent> getUIComponents() {
+    @Override protected void attachContentView(View containerView, @LayoutRes int layoutResID) {
+        super.attachContentView(containerView, layoutResID);
         mDrawerComponent = new DrawerComponent(getDrawerView());
-        ToolbarComponent toolbarComponent = new ToolbarComponent();
-        ArrayMap<String, UIComponent> arrayMap = new ArrayMap<>();
-        arrayMap.put(toolbarComponent.getTag(), toolbarComponent);
-        arrayMap.put(mDrawerComponent.getTag(), mDrawerComponent);
-        return arrayMap;
+        addUIComponents(mDrawerComponent, new ToolbarComponent());
     }
 
     @Override
