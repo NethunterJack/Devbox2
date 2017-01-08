@@ -274,6 +274,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * add UIComponents, it will use {@link UIComponent#getTag()} as name, same component will be replaced
+     * should be called {@link #attachContentView(View, int)}
      *
      * @return current uiComponents
      */
