@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.xxxifan.devbox.core.base.ToolbarActivity;
+import com.xxxifan.devbox.core.base.uicomponent.ToolbarComponent;
 import com.xxxifan.devbox.core.util.Once;
 import com.xxxifan.devbox.core.util.Strings;
 import com.xxxifan.devbox.core.util.ViewUtils;
@@ -39,8 +40,14 @@ public class NewMainActivity extends ToolbarActivity {
         return R.layout.activity_main_new;
     }
 
+    @Override protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+    }
+
     @Override protected void onSetupActivity(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        ToolbarComponent toolbarComponent = getUIComponent(ToolbarComponent.TAG);
+        toolbarComponent.setCenterTitle(this, 24);
         Once.check("firstBoot", new Once.OnceCallback() {
             @Override public void onOnce() {
                 ViewUtils.getSimpleDialogBuilder(getContext(), "首次启动\n\n\nPowered by Once.")

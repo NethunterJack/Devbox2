@@ -38,6 +38,14 @@ public abstract class ToolbarActivity extends BaseActivity {
         addUIComponents(new ToolbarComponent());
     }
 
+    @Override protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+//        ToolbarComponent toolbarComponent = getUIComponent(ToolbarComponent.TAG);
+//        if (toolbarComponent != null) {
+//            toolbarComponent.onTitleChanged();
+//        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
