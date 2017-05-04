@@ -41,9 +41,10 @@ import java.util.List;
 /**
  * Created by xifan on 6/7/16.
  */
-public final class Fragments {
+@SuppressWarnings("RestrictedApi") public final class Fragments {
     public static final String TAG = "Fragments";
     public static final String KEY_RESTORE = "restore";
+    public static final String KEY_SHOULD_RESTORE = "should_restore";
     public static final String KEY_RESTORE_VIEWPAGER = "restore_viewpager";
 
     private static final ArrayMap<String, Integer> REMAIN_POOL = new ArrayMap<>();
@@ -361,12 +362,18 @@ public final class Fragments {
                     } else {
                         Logger.d("reuse disabled, remove");
                         transaction.remove(oldFragment);
+                        if (oldFragment instanceof BaseFragment) {
+                            ((BaseFragment) oldFragment).shouldRestoreFragmentState(false);
+                        }
                     }
                 } else {
                     if (canRemove) {
                         Logger.d(oldFragment + " removed");
                         transaction.remove(oldFragment);
                         canRemove = false;
+                        if (oldFragment instanceof BaseFragment) {
+                            ((BaseFragment) oldFragment).shouldRestoreFragmentState(false);
+                        }
                     } else if (oldFragment.isVisible()) {
                         Logger.d(oldFragment + " hide");
                         transaction.hide(oldFragment);
@@ -590,12 +597,18 @@ public final class Fragments {
                     } else {
                         Logger.d("reuse disabled, remove");
                         transaction.remove(oldFragment);
+                        if (oldFragment instanceof BaseFragment) {
+                            ((BaseFragment) oldFragment).shouldRestoreFragmentState(false);
+                        }
                     }
                 } else {
                     if (canRemove) {
                         Logger.d(oldFragment + " removed");
                         transaction.remove(oldFragment);
                         canRemove = false;
+                        if (oldFragment instanceof BaseFragment) {
+                            ((BaseFragment) oldFragment).shouldRestoreFragmentState(false);
+                        }
                     } else if (oldFragment.isVisible()) {
                         Logger.d(oldFragment + " hide");
                         transaction.hide(oldFragment);

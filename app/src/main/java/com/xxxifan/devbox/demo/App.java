@@ -5,8 +5,6 @@ import android.os.StrictMode;
 
 import com.liulishuo.filedownloader.FileDownloader;
 import com.liulishuo.filedownloader.services.DownloadMgrInitialParams;
-import com.orhanobut.logger.LogLevel;
-import com.orhanobut.logger.Logger;
 import com.xxxifan.devbox.components.http.Http;
 import com.xxxifan.devbox.core.Devbox;
 import com.xxxifan.devbox.core.util.IOUtils;
@@ -40,7 +38,6 @@ public class App extends Application {
 
         initHttpComponent();
 
-        Logger.init("DevboxDemo").logLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE);
         StrictMode.setThreadPolicy((new StrictMode.ThreadPolicy.Builder()).detectDiskReads()
                 .detectDiskWrites()
                 .detectNetwork()

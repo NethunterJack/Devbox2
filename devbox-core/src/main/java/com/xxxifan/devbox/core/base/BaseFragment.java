@@ -59,6 +59,7 @@ public abstract class BaseFragment extends Fragment {
 
     private DataLoader mDataLoader;
     private boolean mRegisterEventBus;
+    private boolean mShouldRestoreState = true;
 
     @Override
     public void onAttach(Context context) {
@@ -191,7 +192,9 @@ public abstract class BaseFragment extends Fragment {
         outState.putBoolean(Fragments.KEY_RESTORE, isVisible());
         outState.putBoolean(Fragments.KEY_RESTORE_VIEWPAGER,
                             getView() != null && getView().getParent() instanceof ViewPager);
-        Logger.t("dev").d("save " + getSimpleName() + getTag() + ": " + isVisible());
+        outState.putBoolean(Fragments.KEY_SHOULD_RESTORE, mShouldRestoreState);
+
+        Logger.d("save " + getSimpleName() + getTag() + " state: " + isVisible());
 
         if (getDataLoader() != null) {
             getDataLoader().onSavedState(outState);
@@ -203,16 +206,23 @@ public abstract class BaseFragment extends Fragment {
             if (savedInstanceState.getBoolean(Fragments.KEY_RESTORE_VIEWPAGER, false)) {
                 return;
             }
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            if (savedInstanceState.getBoolean(Fragments.KEY_RESTORE, false)) {
-                transaction.show(this);
+            if (savedInstanceState.getBoolean(Fragments.KEY_SHOULD_RESTORE)) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                if (savedInstanceState.getBoolean(Fragments.KEY_RESTORE, false)) {
+                    transaction.show(this);
+                } else {
+                    transaction.hide(this);
+                }
+                transaction.commitAllowingStateLoss();
+                Logger.d("restore " + getSimpleName() + getTag() + ": " + savedInstanceState.getBoolean(Fragments.KEY_RESTORE, false));
             } else {
-                transaction.hide(this);
+                Logger.d("should not restore " + getSimpleName() + getTag());
             }
-            transaction.commitAllowingStateLoss();
-            Logger.t("dev")
-                    .d("restore " + getSimpleName() + getTag() + ": " + savedInstanceState.getBoolean(Fragments.KEY_RESTORE, false));
         }
+    }
+
+    public void shouldRestoreFragmentState(boolean restore) {
+        mShouldRestoreState = restore;
     }
 
     //########## Protected construct methods ##########
