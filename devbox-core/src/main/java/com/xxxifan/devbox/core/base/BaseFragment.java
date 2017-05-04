@@ -33,6 +33,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle.LifecycleTransformer;
 import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.android.FragmentEvent;
@@ -190,6 +191,8 @@ public abstract class BaseFragment extends Fragment {
         outState.putBoolean(Fragments.KEY_RESTORE, isVisible());
         outState.putBoolean(Fragments.KEY_RESTORE_VIEWPAGER,
                             getView() != null && getView().getParent() instanceof ViewPager);
+        Logger.t("dev").d("save " + getSimpleName() + getTag() + ": " + isVisible());
+
         if (getDataLoader() != null) {
             getDataLoader().onSavedState(outState);
         }
@@ -207,6 +210,8 @@ public abstract class BaseFragment extends Fragment {
                 transaction.hide(this);
             }
             transaction.commitAllowingStateLoss();
+            Logger.t("dev")
+                    .d("restore " + getSimpleName() + getTag() + ": " + savedInstanceState.getBoolean(Fragments.KEY_RESTORE, false));
         }
     }
 
